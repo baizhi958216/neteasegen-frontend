@@ -1,0 +1,10 @@
+@font-face{
+  font-family: 'misans';
+  src: url('./assets/MiSans-Normal.ttf') format('truetype');
+}
+*{
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: 'misans';
+}
