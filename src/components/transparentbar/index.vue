@@ -31,6 +31,7 @@ const hiddenhandle = () => {
 
 const createHandle = async () => {
   const netease = document.querySelector(".netease") as HTMLElement;
+  status.value = true
   fetch("http://localhost:8000/bilibilihot")
     .then((res) => res.json())
     .then((data) => {
@@ -70,6 +71,7 @@ const createHandle = async () => {
       };
       const chart = init(netease);
       chart.setOption(option);
+      status.value = false
     });
 };
 </script>
