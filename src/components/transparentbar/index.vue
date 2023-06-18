@@ -1,8 +1,12 @@
 <template>
   <div class="iform2" v-loading="status">
-    <div style="margin-bottom: 10px">哔哩哔哩热榜可视化分析-饼图</div>
+    <div style="margin-bottom: 10px">哔哩哔哩热榜可视化分析</div>
 
-    <el-button @click="createHandle" type="primary">生成热榜柱状图</el-button>
+      <el-form-item label="热榜1-100项">
+        <el-input v-model="topNum" placeholder="热榜为前10" />
+      </el-form-item>
+
+    <el-button @click="createHandle" type="primary">开始分析</el-button>
 
     <div class="boxhidden">
       <el-button :icon="ArrowHiddenIcon" circle @click="hiddenhandle" />
@@ -29,17 +33,24 @@ const hiddenhandle = () => {
   }
 };
 
+const topNum = ref(10)
+
 const createHandle = async () => {
   const netease = document.querySelector(".netease") as HTMLElement;
-  status.value = true
+  status.value = true;
   fetch("http://localhost:8000/bilibilihot")
     .then((res) => res.json())
     .then((data) => {
-      const viewdata: { value: string; name: string }[] = [];
-      data.data.list.slice(0, 10).map((el: any) => {
+      const viewdata: {
+        value: string | number;
+        name: string;
+        short_link_v2: string;
+      }[] = [];
+      data.data.list.slice(0, topNum.value).map((el: any) => {
         viewdata.push({
           value: el.stat.view,
           name: el.title,
+          short_link_v2: el.short_link_v2,
         });
       });
       const option = {
@@ -71,7 +82,10 @@ const createHandle = async () => {
       };
       const chart = init(netease);
       chart.setOption(option);
-      status.value = false
+      chart.on("click", (param: any) => {
+        window.open(param.data.short_link_v2);
+      });
+      status.value = false;
     });
 };
 </script>
