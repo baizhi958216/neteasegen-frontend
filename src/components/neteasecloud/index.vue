@@ -41,6 +41,7 @@
       <el-button :icon="ArrowHiddenIcon" circle @click="hiddenhandle" />
     </div>
   </div>
+  <div class="netease" v-show="analyzeStore.nowUsing == 'netease'"></div>
 </template>
 
 <script setup lang="ts">
@@ -51,6 +52,8 @@ import {
   ArrowRight,
   ArrowLeft,
 } from "@element-plus/icons-vue";
+import { useAnalyzeStore } from "../../stores/analyzeStore";
+const analyzeStore = useAnalyzeStore();
 
 const status = ref(false);
 const custom = ref(false);
@@ -89,10 +92,18 @@ const rules = reactive({
   customImage: [{ required: false }],
 });
 
-const fetchImage = (image: HTMLImageElement,ranktype:number=0) => {
-  console.log(`http://localhost:8000/${ranktype==1?'getweek':'genwordcloudpng'}/${formLabel.userId}`);
-  
-  fetch(`http://localhost:8000/${ranktype==1?'getweek':'genwordcloudpng'}/${formLabel.userId}`)
+const fetchImage = (image: HTMLImageElement, ranktype: number = 0) => {
+  console.log(
+    `http://localhost:8000/${ranktype == 1 ? "getweek" : "genwordcloudpng"}/${
+      formLabel.userId
+    }`
+  );
+
+  fetch(
+    `http://localhost:8000/${ranktype == 1 ? "getweek" : "genwordcloudpng"}/${
+      formLabel.userId
+    }`
+  )
     .then((res) => res.json())
     .then((data) => {
       image.src = `http://localhost:8000/static/${data.filePath}`;
@@ -101,14 +112,19 @@ const fetchImage = (image: HTMLImageElement,ranktype:number=0) => {
     });
 };
 
-const fetchCustomImage = (image: HTMLImageElement,ranktype:number=0) => {
+const fetchCustomImage = (image: HTMLImageElement, ranktype: number = 0) => {
   const formData = new FormData();
   formData.append("userId", formLabel.userId.toString());
   formData.append("imagefile", formLabel.customImage[0].raw);
-  fetch(`http://localhost:8000/${ranktype==1?'getcustomweek':'gencustomcloudpng'}`, {
-    method: "POST",
-    body: formData,
-  })
+  fetch(
+    `http://localhost:8000/${
+      ranktype == 1 ? "getcustomweek" : "gencustomcloudpng"
+    }`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  )
     .then((res) => res.json())
     .then((data) => {
       image.src = `http://localhost:8000/static/${data.filePath}`;
@@ -118,15 +134,16 @@ const fetchCustomImage = (image: HTMLImageElement,ranktype:number=0) => {
 };
 
 /**
- * 
+ *
  * @param ranktype 榜单类型 1周榜 0全榜
  */
-const submithandle = (ranktype:number=0) => {
+const submithandle = (ranktype: number = 0) => {
+  analyzeStore.nowUsing = "netease";
   status.value = true;
   const imgcontainer = document.querySelector(".netease");
   if (imgcontainer?.childNodes.length) {
-    imgcontainer.removeAttribute('_echarts_instance_')
-    imgcontainer.innerHTML=''
+    imgcontainer.removeAttribute("_echarts_instance_");
+    imgcontainer.innerHTML = "";
   }
   const image = new Image();
   image.style.maxWidth = "100vw";
@@ -164,5 +181,18 @@ const submithandle = (ranktype:number=0) => {
 .btngroup {
   display: flex;
   justify-content: space-evenly;
+}
+
+.netease {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  z-index: 2;
 }
 </style>

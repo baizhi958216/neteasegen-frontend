@@ -7,11 +7,13 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Bilihot: typeof import('./src/components/bilihot/index.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElUpload: typeof import('element-plus/es')['ElUpload']
+    Neteasecloud: typeof import('./src/components/neteasecloud/index.vue')['default']
     Transparentbar: typeof import('./src/components/transparentbar/index.vue')['default']
     Wordcloud: typeof import('./src/components/wordcloud/index.vue')['default']
   }

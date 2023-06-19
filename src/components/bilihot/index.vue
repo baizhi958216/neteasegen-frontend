@@ -1,16 +1,20 @@
 <template>
-  <div class="iform2" v-loading="status">
+  <div class="iform2">
     <div style="margin-bottom: 10px">哔哩哔哩热榜可视化分析</div>
 
+    <el-form v-loading="status">
       <el-form-item label="热榜1-100项">
         <el-input v-model="topNum" placeholder="热榜为前10" />
       </el-form-item>
 
-    <el-button @click="createHandle" type="primary">开始分析</el-button>
-
+      <el-button @click="createHandle" type="primary">开始分析</el-button>
+    </el-form>
     <div class="boxhidden">
       <el-button :icon="ArrowHiddenIcon" circle @click="hiddenhandle" />
     </div>
+  </div>
+  <div class="bilihot" v-show="analyzeStore.nowUsing == 'bilihot'">
+    <div class="pie"></div>
   </div>
 </template>
 
@@ -18,6 +22,8 @@
 import { ref, shallowRef } from "vue";
 import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
 import { init } from "echarts";
+import { useAnalyzeStore } from "../../stores/analyzeStore";
+const analyzeStore = useAnalyzeStore();
 
 const status = ref(false);
 const ArrowHiddenIcon = shallowRef(ArrowLeft);
@@ -33,10 +39,10 @@ const hiddenhandle = () => {
   }
 };
 
-const topNum = ref(10)
+const topNum = ref(10);
 
 const createHandle = async () => {
-  const netease = document.querySelector(".netease") as HTMLElement;
+  const pie = document.querySelector(".pie") as HTMLElement;
   status.value = true;
   fetch("http://localhost:8000/bilibilihot")
     .then((res) => res.json())
@@ -53,7 +59,7 @@ const createHandle = async () => {
           short_link_v2: el.short_link_v2,
         });
       });
-      const option = {
+      const pieOption = {
         legend: {
           top: "bottom",
         },
@@ -68,10 +74,10 @@ const createHandle = async () => {
         },
         series: [
           {
-            name: "Nightingale Chart",
+            name: "热榜饼图",
             type: "pie",
-            radius: [50, 250],
-            center: ["50%", "50%"],
+            radius: [50, 110],
+            center: ["50%", "40%"],
             roseType: "area",
             itemStyle: {
               borderRadius: 8,
@@ -80,9 +86,10 @@ const createHandle = async () => {
           },
         ],
       };
-      const chart = init(netease);
-      chart.setOption(option);
-      chart.on("click", (param: any) => {
+      const piechart = init(pie);
+      analyzeStore.nowUsing = "bilihot";
+      piechart.setOption(pieOption);
+      piechart.on("click", (param: any) => {
         window.open(param.data.short_link_v2);
       });
       status.value = false;
@@ -114,5 +121,22 @@ const createHandle = async () => {
 .btngroup {
   display: flex;
   justify-content: space-evenly;
+}
+.bilihot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100%;
+  z-index: 2;
+}
+.pie {
+  width: 660px;
+  height: 430px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: inset 0 0 20px 3px rgb(177, 177, 177);
+  border-radius: 1rem;
+  margin: 2rem 4rem;
 }
 </style>
