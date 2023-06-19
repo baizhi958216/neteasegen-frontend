@@ -44,19 +44,19 @@ const topNum = ref(10);
 const createHandle = async () => {
   const pie = document.querySelector(".pie") as HTMLElement;
   status.value = true;
-  fetch("http://localhost:8000/bilibilihot")
+  fetch(`http://localhost:8000/bilibilihot/${topNum.value}`)
     .then((res) => res.json())
     .then((data) => {
       const viewdata: {
         value: string | number;
         name: string;
-        short_link_v2: string;
+        bv: string;
       }[] = [];
-      data.data.list.slice(0, topNum.value).map((el: any) => {
+      data.map((el: any) => {
         viewdata.push({
-          value: el.stat.view,
+          value: el.view,
           name: el.title,
-          short_link_v2: el.short_link_v2,
+          bv: el.bvid,
         });
       });
       const pieOption = {
@@ -67,7 +67,6 @@ const createHandle = async () => {
           show: true,
           feature: {
             mark: { show: true },
-            dataView: { show: true, readOnly: false },
             restore: { show: true },
             saveAsImage: { show: true },
           },
@@ -90,7 +89,7 @@ const createHandle = async () => {
       analyzeStore.nowUsing = "bilihot";
       piechart.setOption(pieOption);
       piechart.on("click", (param: any) => {
-        window.open(param.data.short_link_v2);
+        window.open(`https://www.bilibili.com/video/${param.data.bv}`);
       });
       status.value = false;
     });
