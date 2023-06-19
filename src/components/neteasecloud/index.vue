@@ -93,12 +93,6 @@ const rules = reactive({
 });
 
 const fetchImage = (image: HTMLImageElement, ranktype: number = 0) => {
-  console.log(
-    `http://localhost:8000/${ranktype == 1 ? "getweek" : "genwordcloudpng"}/${
-      formLabel.userId
-    }`
-  );
-
   fetch(
     `http://localhost:8000/${ranktype == 1 ? "getweek" : "genwordcloudpng"}/${
       formLabel.userId

@@ -3,8 +3,8 @@
     <div style="margin-bottom: 10px">哔哩哔哩热榜可视化分析</div>
 
     <el-form v-loading="status">
-      <el-form-item label="热榜1-100项">
-        <el-input v-model="topNum" placeholder="热榜为前10" />
+      <el-form-item label="热榜1-15项">
+        <el-input v-model="topNum" placeholder="热榜默认为前10" />
       </el-form-item>
 
       <el-button @click="createHandle" type="primary">开始分析</el-button>
@@ -14,7 +14,9 @@
     </div>
   </div>
   <div class="bilihot" v-show="analyzeStore.nowUsing == 'bilihot'">
-    <div class="pie"></div>
+    <div class="commonchart viewpie"></div>
+    <div class="commonchart viewracebar"></div>
+    <div class="commonchart typepie"></div>
   </div>
 </template>
 
@@ -23,6 +25,7 @@ import { ref, shallowRef } from "vue";
 import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
 import { init } from "echarts";
 import { useAnalyzeStore } from "../../stores/analyzeStore";
+import { createPie } from "./createPie";
 const analyzeStore = useAnalyzeStore();
 
 const status = ref(false);
@@ -42,55 +45,29 @@ const hiddenhandle = () => {
 const topNum = ref(10);
 
 const createHandle = async () => {
-  const pie = document.querySelector(".pie") as HTMLElement;
+  analyzeStore.nowUsing = "bilihot";
+  const viewPie: HTMLElement = document.querySelector(".viewpie")!;
+  const viewRaceBar: HTMLElement = document.querySelector(".viewracebar")!;
+  const typePie: HTMLElement = document.querySelector(".typepie")!;
+  const commonChart: NodeListOf<HTMLDivElement> =
+    document.querySelectorAll(".commonchart");
   status.value = true;
   fetch(`http://localhost:8000/bilibilihot/${topNum.value}`)
     .then((res) => res.json())
     .then((data) => {
-      const viewdata: {
-        value: string | number;
-        name: string;
-        bv: string;
-      }[] = [];
-      data.map((el: any) => {
-        viewdata.push({
-          value: el.view,
-          name: el.title,
-          bv: el.bvid,
-        });
-      });
-      const pieOption = {
-        legend: {
-          top: "bottom",
-        },
-        toolbox: {
-          show: true,
-          feature: {
-            mark: { show: true },
-            restore: { show: true },
-            saveAsImage: { show: true },
-          },
-        },
-        series: [
-          {
-            name: "热榜饼图",
-            type: "pie",
-            radius: [50, 110],
-            center: ["50%", "40%"],
-            roseType: "area",
-            itemStyle: {
-              borderRadius: 8,
-            },
-            data: viewdata,
-          },
-        ],
-      };
-      const piechart = init(pie);
-      analyzeStore.nowUsing = "bilihot";
-      piechart.setOption(pieOption);
-      piechart.on("click", (param: any) => {
+      const viewPieOption = createPie(data);
+      const typePieOption = createPie(data);
+      const viewRaceBarOption = createPie(data);
+      const viewPieChart = init(viewPie);
+      const typePieChart = init(typePie);
+      const viewRaceBarChart = init(viewRaceBar);
+      viewPieChart.setOption(viewPieOption);
+      typePieChart.setOption(typePieOption);
+      viewRaceBarChart.setOption(viewRaceBarOption);
+      viewPieChart.on("click", (param: any) => {
         window.open(`https://www.bilibili.com/video/${param.data.bv}`);
       });
+      commonChart.forEach((el) => (el.style.opacity = "1"));
       status.value = false;
     });
 };
@@ -129,13 +106,17 @@ const createHandle = async () => {
   height: 100vh;
   height: 100%;
   z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
 }
-.pie {
+.commonchart {
   width: 660px;
   height: 430px;
   background-color: rgb(255, 255, 255);
   box-shadow: inset 0 0 20px 3px rgb(177, 177, 177);
   border-radius: 1rem;
   margin: 2rem 4rem;
+  opacity: 0;
 }
 </style>

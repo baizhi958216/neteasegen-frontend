@@ -15,6 +15,7 @@ import Bilihot from "./components/bilihot/index.vue";
 
 <style scoped>
 .container {
+  position: fixed;
   width: 100vw;
   height: 100vh;
   background-image: url(/bg.png);
