@@ -140,8 +140,11 @@ const submithandle = (ranktype: number = 0) => {
     imgcontainer.innerHTML = "";
   }
   const image = new Image();
-  image.style.maxWidth = "100vw";
-  image.style.maxHeight = "100vh";
+  image.style.maxWidth = "90vw";
+  image.style.maxHeight = "90vh";
+  image.style.padding = "1rem";
+  image.style.boxShadow= '0 0 10px 1px white';
+  image.style.borderRadius = "10px";
   if (formLabel.customImage.length) {
     fetchCustomImage(image, ranktype);
   } else {

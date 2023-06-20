@@ -3,8 +3,8 @@
     <div style="margin-bottom: 10px">哔哩哔哩热榜可视化分析</div>
 
     <el-form v-loading="status">
-      <el-form-item label="热榜1-15项">
-        <el-input v-model="topNum" placeholder="热榜默认为前10" />
+      <el-form-item label="热榜1-20项">
+        <el-input-number max="20" min="1" v-model="topNum" />
       </el-form-item>
 
       <el-button @click="createHandle" type="primary">开始分析</el-button>
@@ -25,7 +25,7 @@ import { ref, shallowRef } from "vue";
 import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
 import { init } from "echarts";
 import { useAnalyzeStore } from "../../stores/analyzeStore";
-import { createPie } from "./createPie";
+import { createViewPie } from "./createPie";
 const analyzeStore = useAnalyzeStore();
 
 const status = ref(false);
@@ -55,9 +55,9 @@ const createHandle = async () => {
   fetch(`http://localhost:8000/bilibilihot/${topNum.value}`)
     .then((res) => res.json())
     .then((data) => {
-      const viewPieOption = createPie(data);
-      const typePieOption = createPie(data);
-      const viewRaceBarOption = createPie(data);
+      const viewPieOption = createViewPie(data);
+      const typePieOption = createViewPie(data);
+      const viewRaceBarOption = createViewPie(data);
       const viewPieChart = init(viewPie);
       const typePieChart = init(typePie);
       const viewRaceBarChart = init(viewRaceBar);
@@ -107,12 +107,13 @@ const createHandle = async () => {
   height: 100%;
   z-index: 2;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   overflow-y: scroll;
 }
 .commonchart {
-  width: 660px;
-  height: 430px;
+  width: 800px;
+  height: 500px;
   background-color: rgb(255, 255, 255);
   box-shadow: inset 0 0 20px 3px rgb(177, 177, 177);
   border-radius: 1rem;

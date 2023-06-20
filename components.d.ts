@@ -12,6 +12,7 @@ declare module 'vue' {
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Neteasecloud: typeof import('./src/components/neteasecloud/index.vue')['default']
     Transparentbar: typeof import('./src/components/transparentbar/index.vue')['default']

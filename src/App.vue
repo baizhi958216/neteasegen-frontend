@@ -3,7 +3,10 @@
     <netease-cloud />
     <bilihot />
     <div class="myheader">
-      <div class="myheaderimg"></div>
+      <div class="myheaderimg">
+        <a href="https://github.com/baizhi958216/neteasegen-frontend" target="_blank"></a>
+      </div>
+      <div class="myheaderimg1"></div>
     </div>
   </div>
 </template>
@@ -29,14 +32,51 @@ import Bilihot from "./components/bilihot/index.vue";
   transform: translate(-50%, -50%);
   z-index: 1;
 }
-.myheaderimg {
+.myheaderimg1 {
   background-image: url(/header.png);
-  background-size: 100%;
-  animation: 15s linear infinite roateme;
+  background-size: 110%;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: 30s linear infinite roateyou;
   width: 260px;
   height: 260px;
+  border-radius: 50%;
+}
+.myheaderimg {
+  position: absolute;
+  background-image: url(/github-mark.png);
+  background-size: 110%;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: 60s linear infinite roateme;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  transition: all linear .3s;
+  z-index: 1;
+}
+.myheaderimg a{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.myheaderimg:hover{
+  background-image: url(/github-mark-white.png);
+  background-size: 110%;
 }
 @keyframes roateme {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes roateyou {
   from {
     transform: rotate(0deg);
   }

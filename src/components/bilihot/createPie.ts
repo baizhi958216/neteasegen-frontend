@@ -1,4 +1,4 @@
-export const createPie = (data: any) => {
+const createViewPie = (data: any) => {
   const viewdata: {
     value: string | number;
     name: string;
@@ -13,8 +13,17 @@ export const createPie = (data: any) => {
   });
   const pieOption = {
     legend: {
-      top: "bottom",
+      type: "scroll",
+      orient: "vertical",
+      right: 10,
+      top: "center",
+      data: viewdata,
     },
+    title: {
+      text: "Bili热度排行饼图",
+      left: 20,
+    },
+    tooltip: {},
     toolbox: {
       show: true,
       feature: {
@@ -25,13 +34,16 @@ export const createPie = (data: any) => {
     },
     series: [
       {
-        name: "热榜饼图",
+        name: "播放量",
         type: "pie",
-        radius: [50, 110],
-        center: ["50%", "40%"],
+        radius: [20, 140],
+        center: ["20%", "50%"],
         roseType: "area",
         itemStyle: {
-          borderRadius: 8,
+          borderRadius: 5,
+        },
+        label: {
+          show: false,
         },
         data: viewdata,
       },
@@ -39,3 +51,9 @@ export const createPie = (data: any) => {
   };
   return pieOption;
 };
+
+const createTypePie = (data: any) => {
+  const pieOption = {};
+  return pieOption;
+};
+export { createViewPie, createTypePie };
