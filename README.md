@@ -1,7 +1,8 @@
 # nesteasegen frontend
 
 ![main](./main.png)
-![pan](./pan.png)
+![netease](./netease.png)
+![bili](./bili.png)
 ## 安装依赖
 
 ```bash
