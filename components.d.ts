@@ -15,8 +15,6 @@ declare module 'vue' {
     ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Neteasecloud: typeof import('./src/components/neteasecloud/index.vue')['default']
-    Transparentbar: typeof import('./src/components/transparentbar/index.vue')['default']
-    Wordcloud: typeof import('./src/components/wordcloud/index.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

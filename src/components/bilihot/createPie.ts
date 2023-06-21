@@ -22,6 +22,7 @@ const createViewPie = (data: any) => {
     title: {
       text: "Bili热度排行饼图",
       left: 20,
+      top: 20,
     },
     tooltip: {},
     toolbox: {
@@ -52,8 +53,4 @@ const createViewPie = (data: any) => {
   return pieOption;
 };
 
-const createTypePie = (data: any) => {
-  const pieOption = {};
-  return pieOption;
-};
-export { createViewPie, createTypePie };
+export { createViewPie };

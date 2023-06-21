@@ -4,7 +4,7 @@
 
     <el-form v-loading="status">
       <el-form-item label="热榜1-20项">
-        <el-input-number max="20" min="1" v-model="topNum" />
+        <el-input-number max=20 min=1 v-model="topNum" />
       </el-form-item>
 
       <el-button @click="createHandle" type="primary">开始分析</el-button>
@@ -15,8 +15,7 @@
   </div>
   <div class="bilihot" v-show="analyzeStore.nowUsing == 'bilihot'">
     <div class="commonchart viewpie"></div>
-    <div class="commonchart viewracebar"></div>
-    <div class="commonchart typepie"></div>
+    <div class="commonchart viewbar"></div>
   </div>
 </template>
 
@@ -26,6 +25,7 @@ import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
 import { init } from "echarts";
 import { useAnalyzeStore } from "../../stores/analyzeStore";
 import { createViewPie } from "./createPie";
+import { createViewBar } from "./createBar";
 const analyzeStore = useAnalyzeStore();
 
 const status = ref(false);
@@ -47,8 +47,7 @@ const topNum = ref(10);
 const createHandle = async () => {
   analyzeStore.nowUsing = "bilihot";
   const viewPie: HTMLElement = document.querySelector(".viewpie")!;
-  const viewRaceBar: HTMLElement = document.querySelector(".viewracebar")!;
-  const typePie: HTMLElement = document.querySelector(".typepie")!;
+  const view3dBar: HTMLElement = document.querySelector(".viewbar")!;
   const commonChart: NodeListOf<HTMLDivElement> =
     document.querySelectorAll(".commonchart");
   status.value = true;
@@ -56,14 +55,11 @@ const createHandle = async () => {
     .then((res) => res.json())
     .then((data) => {
       const viewPieOption = createViewPie(data);
-      const typePieOption = createViewPie(data);
-      const viewRaceBarOption = createViewPie(data);
+      const viewBarOption = createViewBar(data);
       const viewPieChart = init(viewPie);
-      const typePieChart = init(typePie);
-      const viewRaceBarChart = init(viewRaceBar);
+      const viewBarChart = init(view3dBar);
       viewPieChart.setOption(viewPieOption);
-      typePieChart.setOption(typePieOption);
-      viewRaceBarChart.setOption(viewRaceBarOption);
+      viewBarChart.setOption(viewBarOption);
       viewPieChart.on("click", (param: any) => {
         window.open(`https://www.bilibili.com/video/${param.data.bv}`);
       });
@@ -85,19 +81,23 @@ const createHandle = async () => {
   z-index: 999;
   margin-bottom: 1rem;
 }
+
 .boxhidden {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   left: 95%;
 }
+
 .hidden {
   transform: translateX(-90%);
 }
+
 .btngroup {
   display: flex;
   justify-content: space-evenly;
 }
+
 .bilihot {
   position: absolute;
   top: 0;
@@ -108,9 +108,11 @@ const createHandle = async () => {
   z-index: 2;
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   overflow-y: scroll;
 }
+
 .commonchart {
   width: 800px;
   height: 500px;
@@ -121,3 +123,4 @@ const createHandle = async () => {
   opacity: 0;
 }
 </style>
+./createBar
